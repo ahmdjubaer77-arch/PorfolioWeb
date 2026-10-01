@@ -1,8 +1,16 @@
 {
   "rewrites": [
     {
-      "source": "/admin/login",
-      "destination": "https://portfolioweb-gmex.onrender.com/admin/login"
+      "source": "/admin",
+      "destination": "https://portfolioweb-gmex.onrender.com/admin"
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://portfolioweb-gmex.onrender.com/admin/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://portfolioweb-gmex.onrender.com/api/:path*"
     }
   ]
 }
