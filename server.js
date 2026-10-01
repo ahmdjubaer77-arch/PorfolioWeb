@@ -129,7 +129,7 @@ app.use(session({
 
 const loginAttempts = new Map();
 const maxLoginAttempts = 5;
-const loginBlockDuration = 15 * 60 * 1000;
+const loginBlockDuration = 5 * 15 * 30;
 const dummyPasswordHash = bcrypt.hashSync(randomBytes(32).toString("hex"), 12);
 
 function validUsername(username) {
