@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/admin/login",
+      "destination": "https://portfolioweb-gmex.onrender.com/admin/login"
+    }
+  ]
+}
