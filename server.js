@@ -10,7 +10,7 @@ const { randomBytes, randomUUID } = require("crypto");
 require("dotenv").config();
 const cors = require("cors");
 
-app.use(cors());
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -66,6 +66,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Public folder
 app.use(express.static("public"));
+app.use(cors());
 
 const adminSchema = new mongoose.Schema({
     username: {
