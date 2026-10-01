@@ -7,10 +7,11 @@ const fs = require("fs");
 const path = require("path");
 const readline = require("readline/promises");
 const { randomBytes, randomUUID } = require("crypto");
+require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const mongoDB = "mongodb+srv://ahmdjubaer77_db_user:82682588Jubaer@cluster0.e61nfib.mongodb.net/";
+const mongoDB = process.env.MONGO_URL;
 const sessionSecret = process.env.ADMIN_SESSION_SECRET || randomBytes(32).toString("hex");
 const sessionCookieName = "portfolio_admin_session";
 if (process.env.NODE_ENV === "production" && (!process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_SESSION_SECRET.length < 32)) {
