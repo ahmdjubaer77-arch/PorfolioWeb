@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jubaer Ahmed</title>
+    <script>
+        try {
+            const savedTheme = localStorage.getItem("portfolio-theme");
+            const prefersLightTheme = window.matchMedia("(prefers-color-scheme: light)").matches;
+            document.documentElement.dataset.theme = savedTheme === "light" || savedTheme === "dark" ?
+                savedTheme :
+                prefersLightTheme ? "light" : "dark";
+        } catch {
+            document.documentElement.dataset.theme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Bebas+Neue&family=Edu+QLD+Hand:wght@400..700&family=Playwrite+NZ+Guides&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+    <header id="home">
+        <div class="hero">
+            <div class="sec">
+                <a href="#home">Jubaer.</a>
+            </div>
+            <nav class="navbar" aria-label="Main navigation">
+                <span class="glass-drop" aria-hidden="true"></span>
+                <ul>
+                    <li><a class="nav-link is-active" href="#home" aria-current="page">Home</a></li>
+                    <li><a class="nav-link" href="#about">About</a></li>
+                    <li><a class="nav-link" href="#skills">Skills</a></li>
+                    <li><a class="nav-link" href="#projects">Featured Projects</a></li>
+                    <li><a class="nav-link" href="#experience">Experience</a></li>
+                    <li><a class="nav-link" href="#achievements">Achievements</a></li>
+                    <li><a class="nav-link" href="#blog">Blog</a></li>
+                    <li><a class="nav-link" href="#reviews">Reviews</a></li>
+                    <li><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+                <div class="theme-toggle-item">
+                    <a class="admin-nav-link" href="/admin/login" aria-label="Admin Login" title="Admin Login">
+                        <i class="fa-solid fa-user-shield" aria-hidden="true"></i><span>Admin Login</span>
+                    </a>
+                    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to Light Mode" title="Switch to Light Mode" aria-pressed="false">
+                            <span class="theme-toggle-track" aria-hidden="true">
+                                <span class="theme-toggle-indicator"></span>
+                                <i class="fa-solid fa-moon theme-toggle-moon"></i>
+                                <i class="fa-solid fa-sun theme-toggle-sun"></i>
+                            </span>
+                        </button>
+                </div>
+            </nav>
+            <div class="hero-content">
+                <p class="hero-kicker">Personal portfolio</p>
+                <h1>Jubaer Ahmed</h1>
+                <p class="hero-intro">A little about my work, interests, and the things I’m building.</p>
+                <a class="hero-cta" href="#about">Explore my profile</a>
+            </div>
+        </div>
+    </header>
+    <nav class="floating-navbar" data-floating-navbar aria-label="Floating portfolio navigation" aria-hidden="true" inert>
+        <div class="floating-nav-links" aria-label="Page sections">
+            <a class="floating-nav-link is-active" href="#home" aria-label="Home" title="Home" aria-current="page"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span></a>
+            <a class="floating-nav-link" href="#about" aria-label="About" title="About"><i class="fa-regular fa-user" aria-hidden="true"></i><span>About</span></a>
+            <a class="floating-nav-link" href="#skills" aria-label="Skills" title="Skills"><i class="fa-solid fa-code" aria-hidden="true"></i><span>Skills</span></a>
+            <a class="floating-nav-link" href="#projects" aria-label="Featured Projects" title="Featured Projects"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>Projects</span></a>
+            <a class="floating-nav-link" href="#experience" aria-label="Experience" title="Experience"><i class="fa-solid fa-briefcase" aria-hidden="true"></i><span>Experience</span></a>
+            <a class="floating-nav-link" href="#achievements" aria-label="Achievements" title="Achievements"><i class="fa-solid fa-award" aria-hidden="true"></i><span>Awards</span></a>
+            <a class="floating-nav-link" href="#blog" aria-label="Blog" title="Blog"><i class="fa-regular fa-newspaper" aria-hidden="true"></i><span>Blog</span></a>
+            <a class="floating-nav-link" href="#reviews" aria-label="Reviews" title="Reviews"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i><span>Reviews</span></a>
+            <a class="floating-nav-link" href="#contact" aria-label="Contact" title="Contact"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>Contact</span></a>
+        </div>
+        <div class="floating-theme-item">
+            
+            <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to Light Mode" title="Switch to Light Mode" aria-pressed="false">
+                <span class="theme-toggle-track" aria-hidden="true">
+                    <span class="theme-toggle-indicator"></span>
+                    <i class="fa-solid fa-moon theme-toggle-moon"></i>
+                    <i class="fa-solid fa-sun theme-toggle-sun"></i>
+                </span>
+            </button>
+        </div>
+    </nav>
+    <main>
+        <section class="about" id="about" aria-labelledby="about-title">
+            <div class="about-inner">
+                <header class="about-heading">
+                    <p class="section-kicker">About me <span>01 / 05</span></p>
+                    <h2 id="about-title">I build useful things for the web.</h2>
+                    <p class="about-lede">Hi, I’m Jubaer Ahmed, a Computer Science &amp; Technology student and aspiring Full-Stack Web Developer from Bangladesh.</p>
+                </header>
+
+                <div class="about-grid">
+                    <div class="about-story">
+                        <h3>What I do</h3>
+                        <p>I turn ideas into thoughtful digital experiences, from polished personal portfolios to responsive web applications. I care about the details that make a product feel clear, useful, and good to use.</p>
+                        <p>I’m currently pursuing a Diploma in Computer Science &amp; Technology at Infra Polytechnic Institute while growing my skills across frontend and backend development.</p>
+
+                        <h3 class="focus-heading">What I’m focused on</h3>
+                        <ul class="focus-list" aria-label="Development focus areas">
+                            <li>Frontend development</li>
+                            <li>Full-stack projects</li>
+                            <li>Responsive UI</li>
+                            <li>JavaScript &amp; React</li>
+                            <li>Node.js &amp; Express</li>
+                            <li>MongoDB &amp; Mongoose</li>
+                            <li>REST APIs</li>
+                            <li>Git &amp; GitHub</li>
+                            <li>UI/UX</li>
+                        </ul>
+                    </div>
+
+                    <aside class="about-panel" aria-label="Education and current goals">
+                        <p class="panel-label">Right now</p>
+                        <h3>Learning by building.</h3>
+                        <p class="education-copy">Diploma in Computer Science &amp; Technology<br><strong>Infra Polytechnic Institute</strong></p>
+                        <dl class="current-list">
+                            <div><dt>Learning</dt>
+                                <dd>Full-stack development</dd>
+                            </div>
+                            <div><dt>Building</dt>
+                                <dd>Real-world web projects</dd>
+                            </div>
+                            <div><dt>Exploring</dt>
+                                <dd>Modern web tech &amp; AI</dd>
+                            </div>
+                            <div><dt>Working toward</dt>
+                                <dd>Full-stack developer</dd>
+                            </div>
+                        </dl>
+                        <blockquote>“Learn. Build. Improve. Repeat.”</blockquote>
+                    </aside>
+                </div>
+
+                <section class="stack-section" aria-labelledby="stack-title">
+                    <div class="stack-heading">
+                        <p class="section-kicker">The toolkit</p>
+                        <h3 id="stack-title">My tech stack</h3>
+                    </div>
+                    <dl class="stack-list">
+                        <div><dt>Frontend</dt>
+                            <dd>HTML, CSS, JavaScript, React, Tailwind CSS</dd>
+                        </div>
+                        <div><dt>Backend</dt>
+                            <dd>Node.js, Express.js</dd>
+                        </div>
+                        <div><dt>Data</dt>
+                            <dd>MongoDB, Mongoose</dd>
+                        </div>
+                        <div><dt>Tools</dt>
+                            <dd>VS Code, Git, GitHub, Netlify</dd>
+                        </div>
+                        <div><dt>Also exploring</dt>
+                            <dd>Python, REST APIs, JWT authentication</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <div class="approach-row">
+                    <h3>My approach</h3>
+                    <p>Good websites should be more than visually appealing. They should be fast, responsive, accessible, scalable, and easy to use. I’m always learning, experimenting, and building real projects to get better.</p>
+                </div>
+
+                <div class="about-cv-panel" aria-labelledby="about-cv-title">
+                    <div class="about-cv-icon" aria-hidden="true"><i class="fa-regular fa-file-lines"></i></div>
+                    <div class="about-cv-copy">
+                        <p class="about-cv-kicker">Curriculum Vitae</p>
+                        <h3 id="about-cv-title">A closer look at my journey.</h3>
+                        <p>Education, development experience, skills, and recognition in one concise profile.</p>
+                    </div>
+                    <div class="about-cv-actions">
+                        <a class="about-cv-link about-cv-view" href="cv.html" target="_blank" rel="noopener noreferrer">
+                            <span>View CV</span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                        </a>
+                        <a class="about-cv-link about-cv-download" href="cv.html" download="Jubaer-Ahmed-CV.html">
+                            <i class="fa-solid fa-download" aria-hidden="true"></i><span>Download CV</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="skills" id="skills" aria-labelledby="skills-title">
+            <div class="skills-inner">
+                <header class="skills-heading">
+                    <p class="skills-kicker">Capabilities <span>02 / EXPERTISE</span></p>
+                    <h2 id="skills-title">Skills &amp; Expertise</h2>
+                    <p class="skills-intro">A growing toolkit for building thoughtful, reliable digital experiences.</p>
+                </header>
+
+                <div class="skills-filters" role="group" aria-label="Filter skills by category">
+                    <button class="skill-filter is-active" type="button" data-skill-filter="all" aria-pressed="true">All <span>22</span></button>
+                    <button class="skill-filter" type="button" data-skill-filter="frontend" aria-pressed="false">Frontend <span>5</span></button>
+                    <button class="skill-filter" type="button" data-skill-filter="backend" aria-pressed="false">Backend <span>4</span></button>
+                    <button class="skill-filter" type="button" data-skill-filter="database" aria-pressed="false">Database <span>2</span></button>
+                    <button class="skill-filter" type="button" data-skill-filter="programming" aria-pressed="false">Programming <span>2</span></button>
+                    <button class="skill-filter" type="button" data-skill-filter="tools" aria-pressed="false">Tools <span>4</span></button>
+                    <button class="skill-filter" type="button" data-skill-filter="uiux" aria-pressed="false">UI/UX <span>5</span></button>
+                </div>
+
+                <div class="skills-grid" aria-live="polite">
+                    <article class="skill-card" data-category="frontend" style="--skill-index: 0">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-html5" aria-hidden="true"></i></span><span class="skill-category">Frontend</span></div>
+                        <h3>HTML5</h3>
+                        <p>Semantic structure for accessible, well-organized pages.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>84%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="HTML5 proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="84"><span style="--skill-level: 84%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="frontend" style="--skill-index: 1">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-css3-alt" aria-hidden="true"></i></span><span class="skill-category">Frontend</span></div>
+                        <h3>CSS3</h3>
+                        <p>Responsive layouts, refined surfaces, and expressive motion.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>82%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="CSS3 proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="82"><span style="--skill-level: 82%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="frontend" style="--skill-index: 2">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-js" aria-hidden="true"></i></span><span class="skill-category">Frontend</span></div>
+                        <h3>JavaScript</h3>
+                        <p>Interactive interfaces and practical application logic.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>76%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="JavaScript proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="76"><span style="--skill-level: 76%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="frontend" style="--skill-index: 3">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-react" aria-hidden="true"></i></span><span class="skill-category">Frontend</span></div>
+                        <h3>React.js</h3>
+                        <p>Reusable components for dynamic user experiences.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>68%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="React.js proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span style="--skill-level: 68%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="frontend" style="--skill-index: 4">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-wind" aria-hidden="true"></i></span><span class="skill-category">Frontend</span></div>
+                        <h3>Tailwind CSS</h3>
+                        <p>Utility-first styling for consistent responsive UI.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>70%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Tailwind CSS proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"><span style="--skill-level: 70%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="backend" style="--skill-index: 5">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-node-js" aria-hidden="true"></i></span><span class="skill-category">Backend</span></div>
+                        <h3>Node.js</h3>
+                        <p>JavaScript runtime for server-side development.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>68%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Node.js proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span style="--skill-level: 68%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="backend" style="--skill-index: 6">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-server" aria-hidden="true"></i></span><span class="skill-category">Backend</span></div>
+                        <h3>Express.js</h3>
+                        <p>Routing and middleware for lightweight web services.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>64%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Express.js proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"><span style="--skill-level: 64%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="backend" style="--skill-index: 7">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-code-branch" aria-hidden="true"></i></span><span class="skill-category">Backend</span></div>
+                        <h3>REST API</h3>
+                        <p>Clear endpoints and structured client-server data.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>68%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="REST API proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span style="--skill-level: 68%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="backend" style="--skill-index: 8">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span><span class="skill-category">Backend</span></div>
+                        <h3>JWT Authentication</h3>
+                        <p>Token-based authentication for protected routes.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>58%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="JWT authentication proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="58"><span style="--skill-level: 58%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="database" style="--skill-index: 9">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></span><span class="skill-category">Database</span></div>
+                        <h3>MongoDB</h3>
+                        <p>Document-based data storage and flexible schemas.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>64%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="MongoDB proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"><span style="--skill-level: 64%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="database" style="--skill-index: 10">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-leaf" aria-hidden="true"></i></span><span class="skill-category">Database</span></div>
+                        <h3>Mongoose</h3>
+                        <p>Schema modeling, validation, and MongoDB queries.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>62%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Mongoose proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62"><span style="--skill-level: 62%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="programming" style="--skill-index: 11">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-js" aria-hidden="true"></i></span><span class="skill-category">Programming</span></div>
+                        <h3>JavaScript</h3>
+                        <p>Core language for browser and server-side projects.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>76%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="JavaScript programming proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="76"><span style="--skill-level: 76%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="programming" style="--skill-index: 12">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-python" aria-hidden="true"></i></span><span class="skill-category">Programming</span></div>
+                        <h3>Python</h3>
+                        <p>Programming fundamentals and practical scripting.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>54%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Python proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="54"><span style="--skill-level: 54%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="tools" style="--skill-index: 13">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-git-alt" aria-hidden="true"></i></span><span class="skill-category">Tools</span></div>
+                        <h3>Git</h3>
+                        <p>Version control and dependable project history.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>72%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Git proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="72"><span style="--skill-level: 72%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="tools" style="--skill-index: 14">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-brands fa-github" aria-hidden="true"></i></span><span class="skill-category">Tools</span></div>
+                        <h3>GitHub</h3>
+                        <p>Repositories, project collaboration, and sharing work.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>76%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="GitHub proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="76"><span style="--skill-level: 76%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="tools" style="--skill-index: 15">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span><span class="skill-category">Tools</span></div>
+                        <h3>VS Code</h3>
+                        <p>Daily editor for building, debugging, and refining code.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>84%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="VS Code proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="84"><span style="--skill-level: 84%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="tools" style="--skill-index: 16">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></span><span class="skill-category">Tools</span></div>
+                        <h3>Netlify</h3>
+                        <p>Publishing responsive sites with streamlined deployment.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>64%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Netlify proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"><span style="--skill-level: 64%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="uiux" style="--skill-index: 17">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i></span><span class="skill-category">UI/UX</span></div>
+                        <h3>Responsive Design</h3>
+                        <p>Layouts that adapt smoothly from mobile to desktop.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>78%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Responsive design proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78"><span style="--skill-level: 78%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="uiux" style="--skill-index: 18">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i></span><span class="skill-category">UI/UX</span></div>
+                        <h3>UI/UX Design</h3>
+                        <p>Clear visual hierarchy and user-focused interfaces.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>66%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="UI/UX design proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="66"><span style="--skill-level: 66%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="uiux" style="--skill-index: 19">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-droplet" aria-hidden="true"></i></span><span class="skill-category">UI/UX</span></div>
+                        <h3>Glassmorphism</h3>
+                        <p>Layered translucent surfaces with readable contrast.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>72%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Glassmorphism proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="72"><span style="--skill-level: 72%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="uiux" style="--skill-index: 20">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></span><span class="skill-category">UI/UX</span></div>
+                        <h3>CSS Animations</h3>
+                        <p>Lightweight transitions that make interfaces feel alive.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>68%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="CSS animations proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span style="--skill-level: 68%"></span></div>
+                    </article>
+                    <article class="skill-card" data-category="uiux" style="--skill-index: 21">
+                        <div class="skill-card-top"><span class="skill-icon"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i></span><span class="skill-category">UI/UX</span></div>
+                        <h3>Micro-interactions</h3>
+                        <p>Small feedback details for intuitive user flows.</p>
+                        <div class="skill-meter-label"><span>Proficiency</span><span>64%</span></div>
+                        <div class="skill-meter" role="meter" aria-label="Micro-interactions proficiency" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64"><span style="--skill-level: 64%"></span></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <section class="projects" id="projects" aria-labelledby="projects-title">
+            <div class="projects-inner">
+                <header class="projects-heading">
+                    <p class="projects-kicker">Selected work <span>03 / PORTFOLIO</span></p>
+                    <h2 id="projects-title">Featured Projects</h2>
+                    <p class="projects-intro">A showcase of selected work, experiments, and products built with care.</p>
+                </header>
+
+                <div class="projects-grid" data-project-grid hidden aria-live="polite"></div>
+
+                <div class="projects-empty" data-project-empty>
+                    <div class="project-empty-visual" aria-hidden="true">
+                        <div class="project-empty-window">
+                            <div class="project-empty-toolbar"><span></span><span></span><span></span></div>
+                            <div class="project-empty-mark"><i class="fa-regular fa-images"></i></div>
+                            <div class="project-empty-lines"><span></span><span></span><span></span></div>
+                        </div>
+                        <span class="project-empty-index">PROJECT ARCHIVE <i> / 00</i></span>
+                    </div>
+                    <div class="project-empty-copy">
+                        <p class="project-empty-kicker"><span></span> Collection in progress</p>
+                        <h3>No featured projects yet</h3>
+                        <p>Projects will appear here soon.</p>
+                    </div>
+                </div>
+            </div>
+
+            <template id="project-card-template">
+                <article class="project-card">
+                    <div class="project-card-image">
+                        <img data-project-image alt="" loading="lazy">
+                        <span class="project-card-category" data-project-category></span>
+                    </div>
+                    <div class="project-card-content">
+                        <h3 data-project-title></h3>
+                        <p data-project-description></p>
+                        <ul class="project-card-tags" data-project-tags aria-label="Project technologies"></ul>
+                        <div class="project-card-actions">
+                            <a class="project-action project-action-primary" data-project-demo target="_blank" rel="noopener noreferrer">
+                                <span>Live Demo</span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                            </a>
+                            <a class="project-action project-action-secondary" data-project-github target="_blank" rel="noopener noreferrer">
+                                <i class="fa-brands fa-github" aria-hidden="true"></i><span>GitHub</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </template>
+        </section>
+        <section class="experience" id="experience" aria-labelledby="experience-title">
+            <div class="experience-inner">
+                <header class="experience-heading">
+                    <p class="experience-kicker">The journey <span>04 / EXPERIENCE</span></p>
+                    <h2 id="experience-title">Experience</h2>
+                    <p class="experience-intro">A hands-on path from building responsive interfaces to developing full-stack applications.</p>
+                    <blockquote class="experience-tagline">“I don't just learn technologies — I build with them.”</blockquote>
+                </header>
+
+                <div class="experience-timeline">
+                    <article class="experience-item" style="--experience-index: 0">
+                        <p class="experience-date"><span>2024</span><span>Present</span></p>
+                        <span class="experience-marker" aria-hidden="true"></span>
+                        <div class="experience-card">
+                            <div class="experience-card-heading">
+                                <span class="experience-icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
+                                <span class="experience-type">Independent practice</span>
+                            </div>
+                            <h3>Independent Web Developer</h3>
+                            <p class="experience-summary">Building responsive websites and practical frontend projects with a focus on usability and visual design.</p>
+                            <ul class="experience-details">
+                                <li>Build modern interfaces with HTML, CSS, JavaScript, React, and Tailwind CSS.</li>
+                                <li>Develop backend skills with Node.js, Express.js, MongoDB, and Mongoose.</li>
+                                <li>Practice REST APIs, authentication, CRUD operations, and dynamic functionality.</li>
+                                <li>Use Git and GitHub for version control, and deploy projects with modern hosting tools.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="experience-item" style="--experience-index: 1">
+                        <p class="experience-date"><span>2025</span><span>Present</span></p>
+                        <span class="experience-marker" aria-hidden="true"></span>
+                        <div class="experience-card">
+                            <div class="experience-card-heading">
+                                <span class="experience-icon"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></span>
+                                <span class="experience-type">Self-directed learning</span>
+                            </div>
+                            <h3>Full-Stack Development</h3>
+                            <p class="experience-summary">Growing from individual interfaces toward complete applications, from data models to backend APIs.</p>
+                            <ul class="experience-details">
+                                <li>Build full-stack projects that connect frontend experiences to backend services.</li>
+                                <li>Design MongoDB schemas and connect applications with Mongoose.</li>
+                                <li>Explore JWT authentication and secure API patterns.</li>
+                                <li>Strengthen practical skills through real-world projects and ongoing study.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="experience-item" style="--experience-index: 2">
+                        <p class="experience-date experience-date-current"><span>Current</span></p>
+                        <span class="experience-marker" aria-hidden="true"></span>
+                        <div class="experience-card">
+                            <div class="experience-card-heading">
+                                <span class="experience-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span>
+                                <span class="experience-type">Academic experience</span>
+                            </div>
+                            <h3>Diploma in Computer Science &amp; Technology</h3>
+                            <p class="experience-institution">Infra Polytechnic Institute</p>
+                            <p class="experience-summary">Building a strong technical foundation while applying classroom learning through practical projects.</p>
+                            <ul class="experience-details">
+                                <li>Develop a foundation in programming and computer science.</li>
+                                <li>Study software development, databases, networking, and web technologies.</li>
+                                <li>Apply academic knowledge through hands-on experiments and projects.</li>
+                                <li>Prepare for professional opportunities in software and web development.</li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <section class="achievements" id="achievements" aria-labelledby="achievements-title">
+            <div class="achievements-inner">
+                <header class="achievements-heading">
+                    <p class="achievements-kicker">Milestones <span>05 / RECOGNITION</span></p>
+                    <h2 id="achievements-title">Achievements &amp; Recognition</h2>
+                    <p class="achievements-intro">A few milestones that mark the work, curiosity, and creativity behind my journey.</p>
+                </header>
+
+                <div class="achievement-grid" data-achievement-list>
+                    <article class="achievement-card" data-achievement data-year="2024" style="--achievement-index: 0">
+                        <div class="achievement-image-area" data-achievement-image>
+                            <span class="achievement-image-icon"><i class="fa-regular fa-image" aria-hidden="true"></i></span>
+                            <span class="achievement-image-label">Add Certificate / Award Image</span>
+                            <button class="achievement-image-add" type="button" data-demo-action="image" aria-label="Demo only: add an image for Typing Contest">
+                                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="achievement-card-content">
+                            <div class="achievement-card-top"><time class="achievement-year" datetime="2024" data-achievement-year>2024</time><span class="achievement-award"><i class="fa-solid fa-medal" aria-hidden="true"></i><span data-achievement-award>2nd Place</span></span>
+                            </div>
+                            <h3 data-achievement-title>Typing Contest</h3>
+                            <p class="achievement-organization"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-achievement-organization>Infra Polytechnic Institute</span></p>
+                            <p class="achievement-description" data-achievement-description>Achieved 2nd place in a typing competition, demonstrating strong typing speed, accuracy, focus, and digital productivity skills.</p>
+                        </div>
+                    </article>
+
+                    <article class="achievement-card" data-achievement data-year="2025" style="--achievement-index: 1">
+                        <div class="achievement-image-area" data-achievement-image>
+                            <span class="achievement-image-icon"><i class="fa-regular fa-image" aria-hidden="true"></i></span>
+                            <span class="achievement-image-label">Add Certificate / Award Image</span>
+                            <button class="achievement-image-add" type="button" data-demo-action="image" aria-label="Demo only: add an image for Python Programming">
+                                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="achievement-card-content">
+                            <div class="achievement-card-top"><time class="achievement-year" datetime="2025" data-achievement-year>2025</time><span class="achievement-award"><i class="fa-solid fa-award" aria-hidden="true"></i><span data-achievement-award>Recognition / Award</span></span>
+                            </div>
+                            <h3 data-achievement-title>Python Programming</h3>
+                            <p class="achievement-organization"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-achievement-organization>American Space Barishal</span></p>
+                            <p class="achievement-description" data-achievement-description>Received an award for achievement in Python Programming, recognizing programming knowledge, problem-solving ability, and technical skills.</p>
+                        </div>
+                    </article>
+
+                    <article class="achievement-card" data-achievement data-year="2025" style="--achievement-index: 2">
+                        <div class="achievement-image-area" data-achievement-image>
+                            <span class="achievement-image-icon"><i class="fa-regular fa-image" aria-hidden="true"></i></span>
+                            <span class="achievement-image-label">Add Certificate / Award Image</span>
+                            <button class="achievement-image-add" type="button" data-demo-action="image" aria-label="Demo only: add an image for Skills and Innovation Competition">
+                                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="achievement-card-content">
+                            <div class="achievement-card-top"><time class="achievement-year" datetime="2025" data-achievement-year>2025</time><span class="achievement-award"><i class="fa-solid fa-certificate" aria-hidden="true"></i><span data-achievement-award>Certificate</span></span>
+                            </div>
+                            <h3 data-achievement-title>Skills &amp; Innovation Competition</h3>
+                            <p class="achievement-organization"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-achievement-organization>Infra Polytechnic Institute</span></p>
+                            <p class="achievement-description" data-achievement-description>Received a certificate for participating in the Skills &amp; Innovation Competition 2025, demonstrating creativity, technical skills, innovation, and practical problem-solving.</p>
+                        </div>
+                    </article>
+
+                    <article class="achievement-card" data-achievement data-year="2026" style="--achievement-index: 3">
+                        <div class="achievement-image-area" data-achievement-image>
+                            <span class="achievement-image-icon"><i class="fa-regular fa-image" aria-hidden="true"></i></span>
+                            <span class="achievement-image-label">Add Certificate / Award Image</span>
+                            <button class="achievement-image-add" type="button" data-demo-action="image" aria-label="Demo only: add an image for World Cup Theme Design">
+                                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="achievement-card-content">
+                            <div class="achievement-card-top"><time class="achievement-year" datetime="2026" data-achievement-year>2026</time><span class="achievement-award"><i class="fa-solid fa-trophy" aria-hidden="true"></i><span data-achievement-award>Design Award</span></span>
+                            </div>
+                            <h3 data-achievement-title>World Cup Theme Design</h3>
+                            <p class="achievement-organization"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-achievement-organization>American Space Barishal</span></p>
+                            <p class="achievement-description" data-achievement-description>Received recognition for creating a creative 2026 FIFA World Cup-themed graphic design.</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="achievements-footer">
+                    <p class="achievements-feedback" data-achievement-feedback role="status" aria-live="polite"></p>
+                    <button class="achievement-add-button" type="button" data-demo-action="achievement">
+                        <span class="achievement-add-icon"><i class="fa-solid fa-plus" aria-hidden="true"></i></span>
+                        <span>Add Achievement</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        <dialog class="achievement-dialog" data-achievement-dialog aria-label="Achievement details">
+            <div class="achievement-dialog-surface">
+                <button class="achievement-dialog-close" type="button" data-achievement-dialog-close aria-label="Close achievement details">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="achievement-dialog-media" data-achievement-dialog-media></div>
+                <div class="achievement-dialog-details" data-achievement-dialog-details></div>
+            </div>
+        </dialog>
+        <section class="blog" id="blog" aria-labelledby="blog-title">
+            <div class="blog-inner">
+                <header class="blog-heading">
+                    <p class="blog-kicker">Field notes <span>06 / JOURNAL</span></p>
+                    <h2 id="blog-title">Latest Articles</h2>
+                    <p class="blog-intro">A space for ideas, lessons, and notes from the things I’m learning and building.</p>
+                </header>
+
+                <div class="blog-grid" data-blog-grid aria-live="polite"></div>
+
+                <div class="blog-footer">
+                    <p class="blog-feedback" data-blog-feedback role="status" aria-live="polite"></p>
+                    <button class="blog-add-button" type="button" data-blog-demo="add">
+                        <span><i class="fa-solid fa-plus" aria-hidden="true"></i></span>
+                        <span>Add Article</span>
+                    </button>
+                </div>
+            </div>
+
+            <template id="blog-card-template">
+                <article class="blog-card" data-blog-post>
+                    <div class="blog-cover" data-blog-cover-area>
+                        <img class="blog-cover-image" data-blog-cover-image alt="" loading="lazy" hidden>
+                        <div class="blog-cover-placeholder" data-blog-cover-placeholder>
+                            <i class="fa-regular fa-image" aria-hidden="true"></i>
+                            <span>Cover image</span>
+                        </div>
+                        <button class="blog-cover-add" type="button" data-blog-demo="image" aria-label="Demo only: add cover image">
+                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <span class="blog-category" data-blog-category>Category</span>
+                        <span class="blog-featured-label" data-blog-featured-label hidden>Your next article</span>
+                    </div>
+                    <div class="blog-card-content">
+                        <div class="blog-meta">
+                            <span><i class="fa-regular fa-calendar" aria-hidden="true"></i><time data-blog-date>Publication date</time></span>
+                            <span><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-blog-reading-time>Reading time</span></span>
+                        </div>
+                        <h3 data-blog-title>Article title</h3>
+                        <p class="blog-excerpt" data-blog-excerpt>Short description</p>
+                        <ul class="blog-tags" data-blog-tags hidden></ul>
+                        <div class="blog-full-content" data-blog-full-content hidden></div>
+                        <a class="blog-read-more" data-blog-read-more href="#">
+                            <span>Read More</span><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+            </template>
+        </section>
+        <section class="reviews" id="reviews" aria-labelledby="reviews-title">
+            <div class="reviews-inner">
+                <header class="reviews-heading">
+                    <p class="reviews-kicker">Shared perspective <span>07 / TESTIMONIALS</span></p>
+                    <h2 id="reviews-title">Reviews &amp; Testimonials</h2>
+                    <p class="reviews-intro">Feedback from people I've worked and collaborated with.</p>
+                </header>
+
+                <div class="reviews-carousel" aria-label="Testimonial carousel">
+                    <button class="review-carousel-control" type="button" data-review-previous aria-label="Previous reviews">
+                        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                    </button>
+                    <div class="review-viewport" data-review-viewport tabindex="0" aria-label="Reviews. Use the arrow buttons or scroll horizontally to browse.">
+                        <div class="review-track" data-review-track aria-live="polite"></div>
+                    </div>
+                    <button class="review-carousel-control" type="button" data-review-next aria-label="Next reviews">
+                        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="review-carousel-footer">
+                    <div class="review-pagination" data-review-pagination role="group" aria-label="Choose a review"></div>
+                    <div class="reviews-footer">
+                        <p class="reviews-feedback" data-review-feedback role="status" aria-live="polite"></p>
+                        <button class="review-add-button" type="button" data-review-demo="add">
+                            <span><i class="fa-solid fa-plus" aria-hidden="true"></i></span>
+                            <span>Add Review</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <template id="review-card-template">
+                <article class="review-card" data-review-card>
+                    <div class="review-card-top">
+                        <div class="reviewer-profile">
+                            <div class="review-avatar-area">
+                                <img class="review-avatar-image" data-review-image alt="" loading="lazy" hidden>
+                                <span class="review-avatar-placeholder" data-review-image-placeholder aria-label="Add profile image">
+                                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                                </span>
+                                <button class="review-image-add" type="button" data-review-demo="image" aria-label="Demo only: add reviewer profile image">
+                                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <span class="review-avatar-label">Add Profile Image</span>
+                        </div>
+                        <div class="reviewer-details">
+                            <h3 data-review-name>Reviewer Name</h3>
+                            <p class="reviewer-role" data-review-role>Role / Organization</p>
+                            <p class="reviewer-organization" data-review-organization hidden></p>
+                        </div>
+                        <span class="review-quote-icon" aria-hidden="true"><i class="fa-solid fa-quote-right"></i></span>
+                    </div>
+                    <div class="review-card-divider"></div>
+                    <div class="review-card-rating" data-review-rating role="img" aria-label="No rating yet">
+                        <i class="fa-regular fa-star" aria-hidden="true"></i>
+                        <i class="fa-regular fa-star" aria-hidden="true"></i>
+                        <i class="fa-regular fa-star" aria-hidden="true"></i>
+                        <i class="fa-regular fa-star" aria-hidden="true"></i>
+                        <i class="fa-regular fa-star" aria-hidden="true"></i>
+                    </div>
+                    <blockquote class="review-quote"><p data-review-text>Your testimonial will appear here.</p></blockquote>
+                    <time class="review-date" data-review-date hidden></time>
+                </article>
+            </template>
+        </section>
+        <section class="contact" id="contact" aria-labelledby="contact-title">
+            <div class="contact-glow" aria-hidden="true"></div>
+            <div class="contact-inner">
+                <div class="contact-layout">
+                    <div class="contact-intro-column">
+                        <header class="contact-heading">
+                            <p class="contact-kicker"><span></span> Open to good conversations</p>
+                            <h2 id="contact-title">Let's Build Something Great Together.</h2>
+                            <p class="contact-intro">Have a project idea, collaboration opportunity, or simply want to connect? I'm always open to meaningful conversations and new opportunities.</p>
+                            <div class="contact-availability"><span class="availability-dot"></span><span>Available for Projects &amp; Collaborations</span></div>
+                            <div class="contact-hero-actions">
+                                <a class="contact-button contact-button-primary" href="#contact-form"><span>Send Me a Message</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                                <a class="contact-button contact-button-secondary" href="#contact-social"><span>Let's Connect</span><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+                            </div>
+                        </header>
+
+                        <section class="contact-panel contact-social-panel" id="contact-social" aria-labelledby="contact-social-title">
+                            <div class="contact-panel-heading">
+                                <div>
+                                    <p class="contact-panel-kicker">Around the web</p>
+                                    <h3 id="contact-social-title">Find Me Online</h3>
+                                </div>
+                                <i class="fa-solid fa-arrow-up-right-from-square contact-panel-mark" aria-hidden="true"></i>
+                            </div>
+                            <div class="contact-social-grid">
+                                <a class="contact-social-link" href="https://www.facebook.com/Jubaer362/" target="_blank" rel="noopener noreferrer">
+                                    <span class="contact-social-icon"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></span>
+                                    <span class="contact-social-copy"><strong>Facebook</strong><small>@Jubaer362</small></span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square contact-social-arrow" aria-hidden="true"></i>
+                                </a>
+                                <a class="contact-social-link" href="https://www.instagram.com/jubaer362" target="_blank" rel="noopener noreferrer">
+                                    <span class="contact-social-icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>
+                                    <span class="contact-social-copy"><strong>Instagram</strong><small>@jubaer362</small></span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square contact-social-arrow" aria-hidden="true"></i>
+                                </a>
+                                <a class="contact-social-link" href="https://www.threads.net/@jubaer362" target="_blank" rel="noopener noreferrer">
+                                    <span class="contact-social-icon"><i class="fa-brands fa-threads" aria-hidden="true"></i></span>
+                                    <span class="contact-social-copy"><strong>Threads</strong><small>@jubaer362</small></span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square contact-social-arrow" aria-hidden="true"></i>
+                                </a>
+                                <a class="contact-social-link" href="https://github.com/" target="_blank" rel="noopener noreferrer">
+                                    <span class="contact-social-icon"><i class="fa-brands fa-github" aria-hidden="true"></i></span>
+                                    <span class="contact-social-copy"><strong>GitHub</strong><small>Profile link placeholder</small></span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square contact-social-arrow" aria-hidden="true"></i>
+                                </a>
+                                <a class="contact-social-link" href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">
+                                    <span class="contact-social-icon"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></span>
+                                    <span class="contact-social-copy"><strong>LinkedIn</strong><small>Profile link placeholder</small></span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square contact-social-arrow" aria-hidden="true"></i>
+                                </a>
+                                <a class="contact-social-link" href="tel:+8801837804062">
+                                    <span class="contact-social-icon"><i class="fa-brands fa-discord" aria-hidden="true"></i></span>
+                                    <span class="contact-social-copy"><strong>Discord</strong><small>+880 1837-804062</small></span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square contact-social-arrow" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="contact-details-column">
+                        <section class="contact-panel contact-info-panel" aria-labelledby="contact-info-title">
+                            <div class="contact-panel-heading">
+                                <div>
+                                    <p class="contact-panel-kicker">Direct details</p>
+                                    <h3 id="contact-info-title">Contact Information</h3>
+                                </div>
+                                <i class="fa-regular fa-paper-plane contact-panel-mark" aria-hidden="true"></i>
+                            </div>
+                            <div class="contact-info-list">
+                                <div class="contact-info-item">
+                                    <span class="contact-info-icon"><i class="fa-regular fa-user" aria-hidden="true"></i></span>
+                                    <span class="contact-info-copy"><small>Name</small><strong>Jubaer Ahmed</strong></span>
+                                </div>
+                                <div class="contact-info-item">
+                                    <span class="contact-info-icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
+                                    <span class="contact-info-copy"><small>Role</small><strong>Student &amp; Full-Stack Web Developer</strong></span>
+                                </div>
+                                <div class="contact-info-item">
+                                    <span class="contact-info-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
+                                    <span class="contact-info-copy"><small>Location</small><strong>Barishal, Bangladesh</strong></span>
+                                </div>
+                                <a class="contact-info-item contact-info-link" href="mailto:ahmdjubaer77@gmail.com">
+                                    <span class="contact-info-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span>
+                                    <span class="contact-info-copy"><small>Email</small><strong>ahmdjubaer77@gmail.com</strong></span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square contact-info-arrow" aria-hidden="true"></i>
+                                </a>
+                                <a class="contact-info-item contact-info-link" href="https://wa.me/8801837804062" target="_blank" rel="noopener noreferrer">
+                                    <span class="contact-info-icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span>
+                                    <span class="contact-info-copy"><small>WhatsApp</small><strong>+880 1837-804062</strong></span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square contact-info-arrow" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </section>
+
+                        <section class="contact-panel contact-form-panel" aria-labelledby="contact-form-title">
+                            <div class="contact-panel-heading">
+                                <div>
+                                    <p class="contact-panel-kicker">Start a conversation</p>
+                                    <h3 id="contact-form-title">Send a Message</h3>
+                                </div>
+                                <span class="contact-form-index">01 — 04</span>
+                            </div>
+                            <form class="contact-form" id="contact-form" data-contact-form>
+                                <div class="contact-form-row">
+                                    <label class="contact-field">
+                                        <span>Full Name</span>
+                                        <input type="text" name="name" autocomplete="name" placeholder="Your name" required minlength="2">
+                                    </label>
+                                    <label class="contact-field">
+                                        <span>Email Address</span>
+                                        <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                                    </label>
+                                </div>
+                                <label class="contact-field">
+                                    <span>Subject</span>
+                                    <input type="text" name="subject" placeholder="What would you like to discuss?" required minlength="3">
+                                </label>
+                                <label class="contact-field">
+                                    <span>Message</span>
+                                    <textarea name="message" rows="4" placeholder="Tell me a little about it..." required minlength="10"></textarea>
+                                </label>
+                                <div class="contact-form-footer">
+                                    <p class="contact-form-note">Frontend demo only. Messages are not sent or stored.</p>
+                                    <button class="contact-submit" type="submit"><span>Send Message</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                                <p class="contact-form-feedback" data-contact-feedback role="status" aria-live="polite"></p>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+
+                <footer class="contact-footer-cta">
+                    <p>Have an idea? Let's turn it into something real.</p>
+                    <a href="#contact-form">Get In Touch <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </footer>
+            </div>
+        </section>
+    </main>
+    <footer>
+
+    </footer>
+    <script src="script.js" defer></script>
+</body>
+
+</html>

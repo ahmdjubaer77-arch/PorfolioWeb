@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/admin.css">
+</head>
+<body class="login-page">
+    <main class="login-shell">
+        <section class="login-panel" aria-labelledby="login-title">
+            <a class="brand login-brand" href="/">Jubaer<span>.</span><small>PORTFOLIO ADMIN</small></a>
+            <p class="section-caption">SECURE SIGN IN</p>
+            <h1 id="login-title">Welcome back</h1>
+            <p class="login-intro">Sign in to manage your portfolio.</p>
+            <% if (error) { %>
+                <p class="login-error" role="alert"><%= error %></p>
+            <% } %>
+            <form action="/admin/login" method="post" class="login-form">
+                <label class="field">Username
+                    <input name="username" type="text" minlength="3" maxlength="32" pattern="[A-Za-z0-9._-]{3,32}" autocomplete="username" required autofocus>
+                </label>
+                <label class="field">Password
+                    <span class="login-password-row">
+                        <input id="login-password" name="password" type="password" minlength="1" maxlength="128" autocomplete="current-password" required>
+                        <button class="password-toggle" type="button" data-password-toggle aria-pressed="false">Show</button>
+                    </span>
+                </label>
+                <button class="primary-button login-submit" type="submit">Log in</button>
+            </form>
+        </section>
+    </main>
+    <script src="/admin-login.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Admin</title>
+    <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <a class="brand" href="/">Jubaer<span>.</span><small>Admin Pannel For Jubaer</small></a>
+            <nav aria-label="Admin sections">
+                <button class="nav-item is-active" type="button" data-section="overview">Overview</button>
+                <p class="nav-label">CONTENT</p>
+                <button class="nav-item" type="button" data-section="projects">Projects</button>
+                <button class="nav-item" type="button" data-section="achievements">Achievements</button>
+                <button class="nav-item" type="button" data-section="blog">Blog Posts</button>
+                <button class="nav-item" type="button" data-section="reviews">Reviews</button>
+                <button class="nav-item" type="button" data-section="skills">Skills</button>
+                <button class="nav-item" type="button" data-section="experience">Experience</button>
+                <p class="nav-label">SECURITY</p>
+                <button class="nav-item" type="button" data-section="account">Account / Security</button>
+            </nav>
+            <a class="back-link" href="/">View portfolio <span aria-hidden="true">-&gt;</span></a>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div><p class="eyebrow">CONTENT MANAGEMENT</p><h1 id="page-title">Overview</h1></div>
+                <div class="topbar-actions">
+                    <span class="status"><i></i> Local workspace</span>
+                    <form action="/admin/logout" method="post"><button class="logout-button" type="submit">Log out</button></form>
+                </div>
+            </header>
+            <section id="overview" class="overview-panel">
+                <p class="section-caption">YOUR PORTFOLIO</p>
+                <h2>Content at a glance</h2>
+                <div class="stats-grid" id="stats-grid"></div>
+                <p class="overview-note">Choose a section from the navigation to manage its entries.</p>
+            </section>
+            <section id="manager" class="manager-panel" hidden>
+                <div class="section-toolbar">
+                    <div><p class="section-caption" id="section-caption">CONTENT</p><h2 id="section-title">Projects</h2></div>
+                    <button class="primary-button" id="add-button" type="button"><span aria-hidden="true">+</span> Add item</button>
+                </div>
+                <p class="message" id="message" role="status" aria-live="polite"></p>
+                <div class="item-list" id="item-list"></div>
+                <section class="edit-panel" id="edit-panel" hidden>
+                    <div class="edit-heading"><div><p class="section-caption">ENTRY DETAILS</p><h3 id="form-title">Add item</h3></div><button class="close-button" id="cancel-button" type="button" aria-label="Close form">x</button></div>
+                    <form id="entry-form"></form>
+                </section>
+            </section>
+            <section id="account-panel" class="manager-panel account-panel" hidden>
+                <div class="section-toolbar">
+                    <div><p class="section-caption">ADMIN ACCESS</p><h2>Account &amp; Security</h2></div>
+                </div>
+                <p class="message" id="account-message" role="status" aria-live="polite"></p>
+                <div class="account-forms">
+                    <form class="edit-panel account-form" id="username-form">
+                        <div class="edit-heading"><div><p class="section-caption">SIGN-IN DETAILS</p><h3>Change username</h3></div></div>
+                        <label class="field">Username
+                            <input name="username" type="text" value="<%= username %>" minlength="3" maxlength="32" pattern="[A-Za-z0-9._-]{3,32}" autocomplete="username" required>
+                        </label>
+                        <label class="field">Current password
+                            <input name="currentPassword" type="password" maxlength="128" autocomplete="current-password" required>
+                        </label>
+                        <div class="form-actions"><button class="primary-button" type="submit">Update username</button></div>
+                    </form>
+                    <form class="edit-panel account-form" id="password-form">
+                        <div class="edit-heading"><div><p class="section-caption">CREDENTIALS</p><h3>Change password</h3></div></div>
+                        <label class="field">Current password
+                            <input name="currentPassword" type="password" maxlength="128" autocomplete="current-password" required>
+                        </label>
+                        <label class="field">New password
+                            <input name="newPassword" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+                        </label>
+                        <p class="password-hint">Use 12-128 characters with uppercase, lowercase, a number, and a symbol.</p>
+                        <label class="field">Confirm new password
+                            <input name="confirmPassword" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+                        </label>
+                        <div class="form-actions"><button class="primary-button" type="submit">Update password</button></div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/admin.js" defer></script>
+</body>
+</html>

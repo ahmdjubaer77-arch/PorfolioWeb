@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Curriculum vitae of Jubaer Ahmed, Computer Science and Technology student and aspiring Full-Stack Web Developer.">
+    <title>Jubaer Ahmed | CV</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #203344;
+            --muted: #526675;
+            --accent: #477c8e;
+            --line: #d9e2e7;
+            --paper: #fff;
+            --canvas: #edf2f4;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 36px 18px;
+            background: var(--canvas);
+            color: var(--ink);
+            font: 15px/1.6 Arial, sans-serif;
+        }
+
+        main {
+            width: min(860px, 100%);
+            margin: 0 auto;
+            padding: 58px 64px;
+            border: 1px solid var(--line);
+            background: var(--paper);
+            box-shadow: 0 18px 50px rgba(32, 51, 68, 0.08);
+        }
+
+        header {
+            padding-bottom: 25px;
+            border-bottom: 2px solid var(--ink);
+        }
+
+        h1,
+        h2,
+        p {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            line-height: 1.15;
+        }
+
+        .role {
+            margin-top: 8px;
+            color: var(--accent);
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .contact-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px 18px;
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        section {
+            margin-top: 27px;
+        }
+
+        h2 {
+            margin-bottom: 12px;
+            color: var(--accent);
+            font-size: 0.86rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        section > p {
+            color: var(--muted);
+        }
+
+        .entry {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 4px 20px;
+            padding: 13px 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .entry:first-of-type {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .entry h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .entry .date {
+            color: var(--muted);
+            font-size: 0.86rem;
+            white-space: nowrap;
+        }
+
+        .entry .organization {
+            grid-column: 1;
+            color: var(--accent);
+            font-size: 0.89rem;
+            font-weight: 600;
+        }
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            padding: 4px 9px;
+            border: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .award-list {
+            display: grid;
+            gap: 9px;
+        }
+
+        .award-list p {
+            color: var(--muted);
+        }
+
+        .award-list strong {
+            color: var(--ink);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+            main {
+                padding: 32px 24px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .entry {
+                grid-template-columns: 1fr;
+            }
+            .entry .date,
+            .entry .organization {
+                grid-column: 1;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: #fff;
+            }
+            main {
+                width: 100%;
+                padding: 0;
+                border: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Jubaer Ahmed</h1>
+            <p class="role">Computer Science &amp; Technology Student | Aspiring Full-Stack Web Developer</p>
+            <p class="contact-line">
+                <span>Barishal, Bangladesh</span>
+                <span>ahmdjubaer77@gmail.com</span>
+                <span>+880 1837-804062</span>
+            </p>
+        </header>
+
+        <section aria-labelledby="profile-title">
+            <h2 id="profile-title">Profile</h2>
+            <p>Computer Science &amp; Technology student developing responsive, user-focused web experiences. Building practical skills across frontend development, backend APIs, databases, and full-stack application workflows.</p>
+        </section>
+
+        <section aria-labelledby="education-title">
+            <h2 id="education-title">Education</h2>
+            <div class="entry">
+                <h3>Diploma in Computer Science &amp; Technology</h3>
+                <span class="date">Current</span>
+                <p class="organization">Infra Polytechnic Institute</p>
+            </div>
+        </section>
+
+        <section aria-labelledby="experience-title">
+            <h2 id="experience-title">Development Experience</h2>
+            <div class="entry">
+                <h3>Independent Web Developer</h3>
+                <span class="date">2024 – Present</span>
+                <p class="organization">Independent practice</p>
+            </div>
+            <div class="entry">
+                <h3>Full-Stack Development</h3>
+                <span class="date">2025 – Present</span>
+                <p class="organization">Self-directed learning and project development</p>
+            </div>
+        </section>
+
+        <section aria-labelledby="skills-title">
+            <h2 id="skills-title">Technical Skills</h2>
+            <ul>
+                <li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>React.js</li><li>Tailwind CSS</li>
+                <li>Node.js</li><li>Express.js</li><li>REST APIs</li><li>JWT</li><li>MongoDB</li>
+                <li>Mongoose</li><li>Python</li><li>Git</li><li>GitHub</li><li>Netlify</li>
+                <li>Responsive Design</li><li>UI/UX</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="recognition-title">
+            <h2 id="recognition-title">Achievements &amp; Recognition</h2>
+            <div class="award-list">
+                <p><strong>2024 · Typing Contest, 2nd Place</strong> — Infra Polytechnic Institute</p>
+                <p><strong>2025 · Python Programming Award</strong> — American Space Barishal</p>
+                <p><strong>2025 · Skills &amp; Innovation Competition Certificate</strong> — Infra Polytechnic Institute</p>
+                <p><strong>2026 · World Cup Theme Design Award</strong> — American Space Barishal</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
