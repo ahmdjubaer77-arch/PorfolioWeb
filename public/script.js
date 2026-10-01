@@ -760,6 +760,7 @@ function renderExperience(experiences) {
         timeline.append(item);
     });
 }
+const API_URL = "https://portfolioweb-gmex.onrender.com";
 
 async function loadPortfolioContent() {
     const sections = [
@@ -773,7 +774,7 @@ async function loadPortfolioContent() {
 
     await Promise.all(sections.map(async ([name, render]) => {
         try {
-            const response = await fetch(`/api/${name}`);
+            const response = await fetch(`${API_URL}/api/${name}`);
             if (response.ok) render(await response.json());
         } catch {
             // Keep the existing page content if the API is unavailable.

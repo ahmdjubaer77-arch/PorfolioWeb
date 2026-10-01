@@ -8,6 +8,9 @@ const path = require("path");
 const readline = require("readline/promises");
 const { randomBytes, randomUUID } = require("crypto");
 require("dotenv").config();
+const cors = require("cors");
+
+app.use(cors());
 
 const app = express();
 const PORT = process.env.PORT || 3000;
