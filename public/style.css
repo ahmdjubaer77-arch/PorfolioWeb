@@ -3715,6 +3715,26 @@ body.achievement-dialog-open {
     line-height: 1.5;
 }
 
+.contact-form-feedback.is-success,
+.contact-form-feedback.is-error {
+    padding: 9px 12px;
+    border: 1px solid rgba(169, 210, 203, 0.22);
+    border-radius: 5px;
+    background: rgba(135, 185, 178, 0.08);
+}
+
+.contact-form-feedback.is-error {
+    border-color: rgba(232, 167, 141, 0.26);
+    background: rgba(232, 167, 141, 0.07);
+    color: #f0b19d;
+}
+
+.contact-submit:disabled {
+    transform: none;
+    opacity: 0.62;
+    cursor: wait;
+}
+
 .contact-footer-cta {
     display: flex;
     align-items: center;

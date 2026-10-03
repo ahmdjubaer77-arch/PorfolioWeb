@@ -380,6 +380,14 @@ const experienceSchema = new mongoose.Schema({
     technologies: { type: [String], default: [] }
 }, { timestamps: true });
 
+const messageSchema = new mongoose.Schema({
+    name: { type: String, required: true, trim: true, maxlength: 100 },
+    email: { type: String, required: true, trim: true, lowercase: true, maxlength: 254 },
+    subject: { type: String, required: true, trim: true, maxlength: 160 },
+    message: { type: String, required: true, trim: true, maxlength: 5000 },
+    status: { type: String, enum: ["unread", "read"], default: "unread" }
+}, { timestamps: true });
+
 const models = {
     projects: mongoose.model("Project", projectSchema),
     achievements: mongoose.model("Achievement", achievementSchema),
@@ -388,6 +396,95 @@ const models = {
     skills: mongoose.model("Skill", skillSchema),
     experience: mongoose.model("Experience", experienceSchema)
 };
+
+const Message = mongoose.model("Message", messageSchema);
+
+function sanitizeMessageField(value) {
+    if (typeof value !== "string") return "";
+    return value.replace(/[<>]/g, "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim();
+}
+
+app.post("/api/messages", async (req, res) => {
+    const body = req.body && typeof req.body === "object" && !Array.isArray(req.body) ? req.body : {};
+    const name = sanitizeMessageField(body.name);
+    const email = sanitizeMessageField(body.email).toLowerCase();
+    const subject = sanitizeMessageField(body.subject);
+    const message = sanitizeMessageField(body.message);
+
+    if (!name || !email || !subject || !message) {
+        return res.status(400).json({ message: "Name, email, subject, and message are required." });
+    }
+    if (name.length < 2 || name.length > 100) {
+        return res.status(400).json({ message: "Name must be between 2 and 100 characters." });
+    }
+    if (email.length > 254 || !/^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?$/i.test(email)) {
+        return res.status(400).json({ message: "Enter a valid email address (maximum 254 characters)." });
+    }
+    if (subject.length < 3 || subject.length > 160) {
+        return res.status(400).json({ message: "Subject must be between 3 and 160 characters." });
+    }
+    if (message.length < 10 || message.length > 5000) {
+        return res.status(400).json({ message: "Message must be between 10 and 5000 characters." });
+    }
+
+    try {
+        const savedMessage = await Message.create({ name, email, subject, message });
+        res.status(201).json({ message: "Your message was sent successfully.", id: savedMessage._id });
+    } catch (error) {
+        console.error("Failed to save contact message:", error);
+        const responseMessage = process.env.NODE_ENV === "production" ?
+            "Your message could not be saved. Please try again." : error.message || "Your message could not be saved.";
+        res.status(500).json({ message: responseMessage });
+    }
+});
+
+app.get("/api/messages", requireAdmin, async (req, res) => {
+    try {
+        const messages = await Message.find().sort({ createdAt: -1 }).lean();
+        res.json(messages);
+    } catch (error) {
+        res.status(500).json({ message: "Messages could not be loaded." });
+    }
+});
+
+app.get("/api/messages/:id", requireAdmin, async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ message: "Message not found." });
+    try {
+        const message = await Message.findById(req.params.id).lean();
+        if (!message) return res.status(404).json({ message: "Message not found." });
+        res.json(message);
+    } catch (error) {
+        res.status(500).json({ message: "Message could not be loaded." });
+    }
+});
+
+app.patch("/api/messages/:id/read", requireAdmin, async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ message: "Message not found." });
+    if (!req.body || !["read", "unread"].includes(req.body.status)) {
+        return res.status(400).json({ message: "Status must be read or unread." });
+    }
+    try {
+        const message = await Message.findByIdAndUpdate(req.params.id, { $set: { status: req.body.status } }, {
+            new: true,
+            runValidators: true
+        });
+        if (!message) return res.status(404).json({ message: "Message not found." });
+        res.json(message);
+    } catch (error) {
+        res.status(500).json({ message: "Message status could not be updated." });
+    }
+});
+
+app.delete("/api/messages/:id", requireAdmin, async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ message: "Message not found." });
+    try {
+        const message = await Message.findByIdAndDelete(req.params.id);
+        if (!message) return res.status(404).json({ message: "Message not found." });
+        res.json({ message: "Message deleted." });
+    } catch (error) {
+        res.status(500).json({ message: "Message could not be deleted." });
+    }
+});
 
 app.use("/api", (req, res, next) => {
     if (["POST", "PUT", "PATCH", "DELETE"].includes(req.method)) return requireAdmin(req, res, next);

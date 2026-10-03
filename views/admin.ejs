@@ -19,6 +19,7 @@
                 <button class="nav-item" type="button" data-section="reviews">Reviews</button>
                 <button class="nav-item" type="button" data-section="skills">Skills</button>
                 <button class="nav-item" type="button" data-section="experience">Experience</button>
+                <button class="nav-item" type="button" data-section="messages">Messages</button>
                 <p class="nav-label">SECURITY</p>
                 <button class="nav-item" type="button" data-section="account">Account / Security</button>
             </nav>
@@ -50,6 +51,35 @@
                     <div class="edit-heading"><div><p class="section-caption">ENTRY DETAILS</p><h3 id="form-title">Add item</h3></div><button class="close-button" id="cancel-button" type="button" aria-label="Close form">x</button></div>
                     <form id="entry-form"></form>
                 </section>
+            </section>
+            <section id="messages-panel" class="manager-panel messages-panel" hidden>
+                <div class="section-toolbar">
+                    <div><p class="section-caption">INBOX</p><h2>Messages</h2></div>
+                    <button class="secondary-button" id="refresh-messages" type="button">Refresh</button>
+                </div>
+                <div class="message-stats" aria-label="Message statistics">
+                    <article class="stat"><span>Total Messages</span><strong id="message-total">0</strong></article>
+                    <article class="stat"><span>Unread</span><strong id="message-unread">0</strong></article>
+                    <article class="stat"><span>Read</span><strong id="message-read">0</strong></article>
+                </div>
+                <div class="messages-controls">
+                    <label class="message-search-label" for="message-search">Search messages</label>
+                    <input id="message-search" class="message-search" type="search" placeholder="Search name, email, or subject">
+                    <div class="message-filters" role="group" aria-label="Filter messages">
+                        <button class="message-filter is-active" type="button" data-message-filter="all" aria-pressed="true">All</button>
+                        <button class="message-filter" type="button" data-message-filter="unread" aria-pressed="false">Unread</button>
+                        <button class="message-filter" type="button" data-message-filter="read" aria-pressed="false">Read</button>
+                    </div>
+                </div>
+                <p class="message messages-feedback" id="messages-feedback" role="status" aria-live="polite"></p>
+                <p class="messages-state" id="messages-loading" hidden>Loading messages...</p>
+                <p class="empty-state messages-state" id="messages-empty" hidden></p>
+                <div class="message-list" id="messages-list" aria-live="polite"></div>
+                <nav class="message-pagination" id="message-pagination" aria-label="Message pages" hidden>
+                    <button class="secondary-button" id="messages-previous" type="button">Previous</button>
+                    <span id="messages-page-label"></span>
+                    <button class="secondary-button" id="messages-next" type="button">Next</button>
+                </nav>
             </section>
             <section id="account-panel" class="manager-panel account-panel" hidden>
                 <div class="section-toolbar">
@@ -85,6 +115,27 @@
             </section>
         </main>
     </div>
+    <dialog class="message-dialog" id="message-dialog" aria-labelledby="message-detail-subject">
+        <article class="message-detail">
+            <header class="message-detail-header">
+                <div><p class="section-caption">INCOMING MESSAGE</p><h2 id="message-detail-subject"></h2></div>
+                <button class="close-button" id="message-detail-close" type="button" aria-label="Close message">×</button>
+            </header>
+            <div class="message-detail-meta">
+                <strong id="message-detail-name"></strong>
+                <a id="message-detail-email"></a>
+                <time id="message-detail-date"></time>
+                <span class="message-status" id="message-detail-status"></span>
+            </div>
+            <p class="message-detail-body" id="message-detail-body"></p>
+            <footer class="message-detail-actions">
+                <a class="secondary-button message-reply" id="message-reply" target="_blank" rel="noopener noreferrer">Reply via Email</a>
+                <button class="secondary-button" id="message-toggle-status" type="button">Mark as Read</button>
+                <button class="delete-button" id="message-delete" type="button">Delete Message</button>
+            </footer>
+        </article>
+    </dialog>
+    <div class="admin-toast" id="admin-toast" role="status" aria-live="polite"></div>
     <script src="/admin.js" defer></script>
 </body>
 </html>

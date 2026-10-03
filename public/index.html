@@ -558,13 +558,7 @@
                     </article>
                 </div>
 
-                <div class="achievements-footer">
-                    <p class="achievements-feedback" data-achievement-feedback role="status" aria-live="polite"></p>
-                    <button class="achievement-add-button" type="button" data-demo-action="achievement">
-                        <span class="achievement-add-icon"><i class="fa-solid fa-plus" aria-hidden="true"></i></span>
-                        <span>Add Achievement</span>
-                    </button>
-                </div>
+                
             </div>
         </section>
         <dialog class="achievement-dialog" data-achievement-dialog aria-label="Achievement details">
@@ -588,10 +582,7 @@
 
                 <div class="blog-footer">
                     <p class="blog-feedback" data-blog-feedback role="status" aria-live="polite"></p>
-                    <button class="blog-add-button" type="button" data-blog-demo="add">
-                        <span><i class="fa-solid fa-plus" aria-hidden="true"></i></span>
-                        <span>Add Article</span>
-                    </button>
+                    
                 </div>
             </div>
 
@@ -603,9 +594,7 @@
                             <i class="fa-regular fa-image" aria-hidden="true"></i>
                             <span>Cover image</span>
                         </div>
-                        <button class="blog-cover-add" type="button" data-blog-demo="image" aria-label="Demo only: add cover image">
-                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
-                        </button>
+                        
                         <span class="blog-category" data-blog-category>Category</span>
                         <span class="blog-featured-label" data-blog-featured-label hidden>Your next article</span>
                     </div>
@@ -798,23 +787,23 @@
                                 <div class="contact-form-row">
                                     <label class="contact-field">
                                         <span>Full Name</span>
-                                        <input type="text" name="name" autocomplete="name" placeholder="Your name" required minlength="2">
+                                        <input type="text" name="name" autocomplete="name" placeholder="Your name" required minlength="2" maxlength="100">
                                     </label>
                                     <label class="contact-field">
                                         <span>Email Address</span>
-                                        <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                                        <input type="email" name="email" autocomplete="email" placeholder="you@example.com" required maxlength="254">
                                     </label>
                                 </div>
                                 <label class="contact-field">
                                     <span>Subject</span>
-                                    <input type="text" name="subject" placeholder="What would you like to discuss?" required minlength="3">
+                                    <input type="text" name="subject" placeholder="What would you like to discuss?" required minlength="3" maxlength="160">
                                 </label>
                                 <label class="contact-field">
                                     <span>Message</span>
-                                    <textarea name="message" rows="4" placeholder="Tell me a little about it..." required minlength="10"></textarea>
+                                    <textarea name="message" rows="4" placeholder="Tell me a little about it..." required minlength="10" maxlength="5000"></textarea>
                                 </label>
                                 <div class="contact-form-footer">
-                                    <p class="contact-form-note">Frontend demo only. Messages are not sent or stored.</p>
+                                    <p class="contact-form-note">Your message will be delivered securely.</p>
                                     <button class="contact-submit" type="submit"><span>Send Message</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                                 </div>
                                 <p class="contact-form-feedback" data-contact-feedback role="status" aria-live="polite"></p>

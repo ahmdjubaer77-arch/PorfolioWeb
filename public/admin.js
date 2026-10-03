@@ -34,11 +34,25 @@ const overview = document.querySelector("#overview");
 const manager = document.querySelector("#manager");
 const accountPanel = document.querySelector("#account-panel");
 const accountMessage = document.querySelector("#account-message");
+const messagesPanel = document.querySelector("#messages-panel");
+const messagesList = document.querySelector("#messages-list");
+const messagesFeedback = document.querySelector("#messages-feedback");
+const messagesLoading = document.querySelector("#messages-loading");
+const messagesEmpty = document.querySelector("#messages-empty");
+const messagesPagination = document.querySelector("#message-pagination");
+const messageDialog = document.querySelector("#message-dialog");
+const adminToast = document.querySelector("#admin-toast");
 const list = document.querySelector("#item-list");
 const form = document.querySelector("#entry-form");
 const editPanel = document.querySelector("#edit-panel");
 let activeSection = "overview";
 let editingId = null;
+let messageItems = [];
+let messageFilter = "all";
+let messagePage = 1;
+let selectedMessage = null;
+let toastTimeout = null;
+const messagesPerPage = 8;
 
 async function request(path, options = {}) {
     const headers = { ...options.headers };
@@ -79,15 +93,18 @@ function setSection(section) {
     activeSection = section;
     const isOverview = section === "overview";
     const isAccount = section === "account";
+    const isMessages = section === "messages";
     document.querySelectorAll(".nav-item").forEach((button) => {
         button.classList.toggle("is-active", button.dataset.section === section);
     });
-    document.querySelector("#page-title").textContent = isOverview ? "Overview" : isAccount ? "Account & Security" : titles[section];
+    document.querySelector("#page-title").textContent = isOverview ? "Overview" : isAccount ? "Account & Security" : isMessages ? "Messages" : titles[section];
     overview.hidden = !isOverview;
-    manager.hidden = isOverview || isAccount;
+    manager.hidden = isOverview || isAccount || isMessages;
     accountPanel.hidden = !isAccount;
+    messagesPanel.hidden = !isMessages;
     editPanel.hidden = true;
-    if (!isOverview && !isAccount) loadItems();
+    if (isMessages) loadMessages();
+    else if (!isOverview && !isAccount) loadItems();
 }
 
 async function loadItems() {
@@ -244,9 +261,204 @@ async function deleteItem(item) {
     }
 }
 
+function formatMessageDate(value) {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "Date unavailable" : new Intl.DateTimeFormat(undefined, {
+        dateStyle: "medium",
+        timeStyle: "short"
+    }).format(date);
+}
+
+function mailtoAddress(email) {
+    return encodeURIComponent(email).replace(/%40/gi, "@");
+}
+
+function showAdminToast(message) {
+    adminToast.textContent = message;
+    adminToast.classList.add("is-visible");
+    window.clearTimeout(toastTimeout);
+    toastTimeout = window.setTimeout(() => adminToast.classList.remove("is-visible"), 3200);
+}
+
+function updateMessageStats() {
+    const unreadCount = messageItems.filter((item) => item.status === "unread").length;
+    document.querySelector("#message-total").textContent = messageItems.length;
+    document.querySelector("#message-unread").textContent = unreadCount;
+    document.querySelector("#message-read").textContent = messageItems.length - unreadCount;
+}
+
+function filteredMessages() {
+    const query = document.querySelector("#message-search").value.trim().toLowerCase();
+    return messageItems.filter((item) => {
+        const matchesStatus = messageFilter === "all" || item.status === messageFilter;
+        const matchesSearch = !query || [item.name, item.email, item.subject]
+            .some((value) => String(value || "").toLowerCase().includes(query));
+        return matchesStatus && matchesSearch;
+    });
+}
+
+function renderMessages() {
+    updateMessageStats();
+    const matchingItems = filteredMessages();
+    const pageCount = Math.max(1, Math.ceil(matchingItems.length / messagesPerPage));
+    messagePage = Math.min(messagePage, pageCount);
+    const start = (messagePage - 1) * messagesPerPage;
+    const pageItems = matchingItems.slice(start, start + messagesPerPage);
+    messagesList.replaceChildren();
+
+    pageItems.forEach((item) => {
+        const card = document.createElement("article");
+        card.className = `message-card${item.status === "unread" ? " is-unread" : ""}`;
+        const open = document.createElement("button");
+        open.type = "button";
+        open.className = "message-card-button";
+
+        const header = document.createElement("div");
+        header.className = "message-card-header";
+        const sender = document.createElement("div");
+        sender.className = "message-card-sender";
+        const name = document.createElement("strong");
+        name.textContent = item.name;
+        const email = document.createElement("span");
+        email.textContent = item.email;
+        sender.append(name, email);
+        const status = document.createElement("span");
+        status.className = `message-status ${item.status === "read" ? "is-read" : "is-unread"}`;
+        status.textContent = item.status === "read" ? "Read" : "Unread";
+        header.append(sender, status);
+
+        const subject = document.createElement("h3");
+        subject.textContent = item.subject;
+        const preview = document.createElement("p");
+        preview.className = "message-preview";
+        preview.textContent = item.message;
+        const date = document.createElement("time");
+        date.className = "message-card-date";
+        date.dateTime = item.createdAt || "";
+        date.textContent = formatMessageDate(item.createdAt);
+        open.append(header, subject, preview, date);
+        open.addEventListener("click", () => openMessage(item));
+        card.append(open);
+        messagesList.append(card);
+    });
+
+    messagesEmpty.hidden = matchingItems.length > 0;
+    if (messageItems.length === 0) messagesEmpty.textContent = "No messages yet. New contact messages will appear here.";
+    else if (matchingItems.length === 0) messagesEmpty.textContent = "No messages match your search or filter.";
+    messagesPagination.hidden = matchingItems.length <= messagesPerPage;
+    document.querySelector("#messages-page-label").textContent = `Page ${messagePage} of ${pageCount}`;
+    document.querySelector("#messages-previous").disabled = messagePage <= 1;
+    document.querySelector("#messages-next").disabled = messagePage >= pageCount;
+}
+
+async function loadMessages() {
+    messagesFeedback.textContent = "";
+    messagesFeedback.classList.remove("is-error");
+    messagesLoading.hidden = false;
+    messagesEmpty.hidden = true;
+    messagesPagination.hidden = true;
+    messagesList.replaceChildren();
+    try {
+        const result = await request("/api/messages");
+        messageItems = Array.isArray(result) ? result : [];
+        messagePage = 1;
+        renderMessages();
+    } catch (error) {
+        messagesFeedback.textContent = error.message;
+        messagesFeedback.classList.add("is-error");
+    } finally {
+        messagesLoading.hidden = true;
+    }
+}
+
+function renderMessageDetails(item) {
+    selectedMessage = item;
+    document.querySelector("#message-detail-subject").textContent = item.subject;
+    document.querySelector("#message-detail-name").textContent = item.name;
+    const email = document.querySelector("#message-detail-email");
+    email.textContent = item.email;
+    email.href = `mailto:${mailtoAddress(item.email)}`;
+    const date = document.querySelector("#message-detail-date");
+    date.dateTime = item.createdAt || "";
+    date.textContent = formatMessageDate(item.createdAt);
+    document.querySelector("#message-detail-body").textContent = item.message;
+    const status = document.querySelector("#message-detail-status");
+    status.textContent = item.status === "read" ? "Read" : "Unread";
+    status.className = `message-status ${item.status === "read" ? "is-read" : "is-unread"}`;
+    document.querySelector("#message-toggle-status").textContent = item.status === "read" ? "Mark as Unread" : "Mark as Read";
+    document.querySelector("#message-reply").href = `mailto:${mailtoAddress(item.email)}?subject=${encodeURIComponent(`Re: ${item.subject}`)}`;
+}
+
+function openMessage(item) {
+    renderMessageDetails(item);
+    if (!messageDialog.open) messageDialog.showModal();
+}
+
+async function toggleMessageStatus() {
+    if (!selectedMessage) return;
+    const nextStatus = selectedMessage.status === "read" ? "unread" : "read";
+    try {
+        const updated = await request(`/api/messages/${encodeURIComponent(selectedMessage._id)}/read`, {
+            method: "PATCH",
+            body: JSON.stringify({ status: nextStatus })
+        });
+        messageItems = messageItems.map((item) => item._id === updated._id ? updated : item);
+        renderMessageDetails(updated);
+        renderMessages();
+        showAdminToast(nextStatus === "read" ? "Message marked as read." : "Message marked as unread.");
+    } catch (error) {
+        messagesFeedback.textContent = error.message;
+        messagesFeedback.classList.add("is-error");
+    }
+}
+
+async function deleteSelectedMessage() {
+    if (!selectedMessage || !window.confirm(`Delete the message from ${selectedMessage.name}? This cannot be undone.`)) return;
+    try {
+        await request(`/api/messages/${encodeURIComponent(selectedMessage._id)}`, { method: "DELETE" });
+        messageItems = messageItems.filter((item) => item._id !== selectedMessage._id);
+        messageDialog.close();
+        selectedMessage = null;
+        renderMessages();
+        showAdminToast("Message deleted.");
+    } catch (error) {
+        messagesFeedback.textContent = error.message;
+        messagesFeedback.classList.add("is-error");
+    }
+}
+
 document.querySelectorAll(".nav-item").forEach((button) => button.addEventListener("click", () => setSection(button.dataset.section)));
 document.querySelector("#add-button").addEventListener("click", () => openForm());
 document.querySelector("#cancel-button").addEventListener("click", closeForm);
+document.querySelector("#refresh-messages").addEventListener("click", loadMessages);
+document.querySelector("#message-search").addEventListener("input", () => {
+    messagePage = 1;
+    renderMessages();
+});
+document.querySelectorAll("[data-message-filter]").forEach((button) => button.addEventListener("click", () => {
+    messageFilter = button.dataset.messageFilter;
+    messagePage = 1;
+    document.querySelectorAll("[data-message-filter]").forEach((filterButton) => {
+        const isActive = filterButton === button;
+        filterButton.classList.toggle("is-active", isActive);
+        filterButton.setAttribute("aria-pressed", String(isActive));
+    });
+    renderMessages();
+}));
+document.querySelector("#messages-previous").addEventListener("click", () => {
+    messagePage -= 1;
+    renderMessages();
+});
+document.querySelector("#messages-next").addEventListener("click", () => {
+    messagePage += 1;
+    renderMessages();
+});
+document.querySelector("#message-detail-close").addEventListener("click", () => messageDialog.close());
+document.querySelector("#message-toggle-status").addEventListener("click", toggleMessageStatus);
+document.querySelector("#message-delete").addEventListener("click", deleteSelectedMessage);
+messageDialog.addEventListener("click", (event) => {
+    if (event.target === messageDialog) messageDialog.close();
+});
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();

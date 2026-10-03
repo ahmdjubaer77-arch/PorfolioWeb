@@ -631,13 +631,75 @@ const contactSection = document.querySelector(".contact");
 if (contactSection) {
     const contactForm = contactSection.querySelector("[data-contact-form]");
     const contactFeedback = contactSection.querySelector("[data-contact-feedback]");
+    const contactSubmit = contactForm.querySelector(".contact-submit");
+    const contactSubmitLabel = contactSubmit.querySelector("span");
+    const defaultSubmitLabel = contactSubmitLabel.textContent;
+    let isSubmittingContact = false;
 
-    contactForm.addEventListener("submit", (event) => {
+    contactForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        if (!contactForm.reportValidity()) return;
+        if (isSubmittingContact || !contactForm.reportValidity()) return;
 
-        contactFeedback.textContent = "Your message is ready. This frontend demo does not send or store it.";
+        const formData = new FormData(contactForm);
+        const values = Object.fromEntries(["name", "email", "subject", "message"].map((name) => [
+            name,
+            String(formData.get(name) || "").trim()
+        ]));
+        const emailPattern = /^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?$/i;
+        if (values.name.length < 2 || values.name.length > 100 ||
+            !emailPattern.test(values.email) || values.email.length > 254 ||
+            values.subject.length < 3 || values.subject.length > 160 ||
+            values.message.length < 10 || values.message.length > 5000) {
+            contactFeedback.textContent = "Check your details and make sure each field is within its length limit.";
+            contactFeedback.classList.add("is-error");
+            contactFeedback.classList.remove("is-success");
+            return;
+        }
+
+        isSubmittingContact = true;
+        contactSubmit.disabled = true;
+        contactSubmit.setAttribute("aria-busy", "true");
+        contactSubmitLabel.textContent = "Sending...";
+        contactFeedback.textContent = "";
+        contactFeedback.classList.remove("is-error", "is-success");
+
+        try {
+            const response = await fetch(`${API_URL}/api/messages`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(values)
+            });
+            const result = await response.json().catch(() => null);
+            const publicError = "We couldn't send your message right now. Please try again in a moment.";
+            if (!response.ok || response.redirected || !result) {
+                console.error("Contact message request failed:", {
+                    status: response.status,
+                    url: response.url,
+                    redirected: response.redirected,
+                    message: result?.message || "The server did not return a JSON error message."
+                });
+            }
+            if (response.status === 401 || response.redirected || result?.message === "Please log in to manage content.") {
+                throw new Error(publicError);
+            }
+            if (!response.ok || !result) throw new Error(result?.message || publicError);
+
+            contactForm.reset();
+            contactFeedback.textContent = result.message || "Message sent successfully. Thank you for reaching out.";
+            contactFeedback.classList.add("is-success");
+        } catch (error) {
+            if (error.name === "TypeError") console.error("Contact message network or CORS failure:", error);
+            contactFeedback.textContent = error.name === "TypeError" ?
+                "We couldn't send your message right now. Please try again in a moment." :
+                error.message || "We couldn't send your message. Please try again.";
+            contactFeedback.classList.add("is-error");
+        } finally {
+            isSubmittingContact = false;
+            contactSubmit.disabled = false;
+            contactSubmit.removeAttribute("aria-busy");
+            contactSubmitLabel.textContent = defaultSubmitLabel;
+        }
     });
 
     const contactObserver = new IntersectionObserver((entries, observer) => {
