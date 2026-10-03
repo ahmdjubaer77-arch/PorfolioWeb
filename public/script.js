@@ -171,15 +171,29 @@ if (skillsSection) {
 }
 
 const projectsSection = document.querySelector(".projects");
+const API_URL = "https://portfolioweb-gmex.onrender.com";
+
+function getAssetUrl(filePath) {
+    if (!filePath) return "";
+    if (/^https?:\/\//i.test(filePath)) return filePath;
+    return `${API_URL}${filePath}`;
+}
 
 function isUploadedAsset(filePath) {
-    return typeof filePath === "string" && /^\/uploads\/[\w-]+\.(jpg|jpeg|png|pdf)$/i.test(filePath);
+    return typeof filePath === "string" && (
+        /^https?:\/\//i.test(filePath) ||
+        /^\/uploads\/[\w-]+\.(jpg|jpeg|png|webp|pdf)(?:[?#].*)?$/i.test(filePath)
+    );
+}
+
+function isPdfAsset(filePath) {
+    return typeof filePath === "string" && /\.pdf(?:[?#].*)?$/i.test(filePath);
 }
 
 function createPortfolioPdfLink(filePath, label) {
     const link = document.createElement("a");
     link.className = "portfolio-document-link";
-    link.href = filePath;
+    link.href = getAssetUrl(filePath);
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     link.textContent = label;
@@ -201,13 +215,13 @@ if (projectsSection) {
             const projectCard = projectCardTemplate.content.firstElementChild.cloneNode(true);
             const projectImage = projectCard.querySelector("[data-project-image]");
 
-            if (isUploadedAsset(project.imageUrl) && /\.pdf$/i.test(project.imageUrl)) {
+            if (isUploadedAsset(project.imageUrl) && isPdfAsset(project.imageUrl)) {
                 projectImage.remove();
                 const projectImageArea = projectCard.querySelector(".project-card-image");
                 const projectCategory = projectCard.querySelector("[data-project-category]");
                 projectImageArea.insertBefore(createPortfolioPdfLink(project.imageUrl, "View project PDF"), projectCategory);
             } else if (isUploadedAsset(project.imageUrl)) {
-                projectImage.src = project.imageUrl;
+                projectImage.src = getAssetUrl(project.imageUrl);
                 projectImage.alt = `${project.title || "Project"} preview`;
             } else {
                 projectImage.remove();
@@ -382,7 +396,7 @@ if (blogSection) {
             blogCard.dataset.featured = String(isFeatured);
             blogCard.querySelector("[data-blog-featured-label]").hidden = !post.placeholder || !isFeatured;
 
-            if (isUploadedAsset(post.coverImageUrl) && /\.pdf$/i.test(post.coverImageUrl)) {
+            if (isUploadedAsset(post.coverImageUrl) && isPdfAsset(post.coverImageUrl)) {
                 coverImage.hidden = true;
                 coverPlaceholder.hidden = true;
                 coverAddButton.hidden = true;
@@ -392,7 +406,7 @@ if (blogSection) {
                     category
                 );
             } else if (isUploadedAsset(post.coverImageUrl)) {
-                coverImage.src = post.coverImageUrl;
+                coverImage.src = getAssetUrl(post.coverImageUrl);
                 coverImage.alt = post.title ? `${post.title} cover image` : "Article cover image";
                 coverImage.hidden = false;
                 coverPlaceholder.hidden = true;
@@ -526,12 +540,12 @@ if (reviewsSection) {
                 organization.hidden = false;
             }
 
-            if (isUploadedAsset(review.profileImageUrl) && /\.pdf$/i.test(review.profileImageUrl)) {
+            if (isUploadedAsset(review.profileImageUrl) && isPdfAsset(review.profileImageUrl)) {
                 imagePlaceholder.hidden = true;
                 imageAddButton.hidden = true;
                 reviewCard.append(createPortfolioPdfLink(review.profileImageUrl, "View profile PDF"));
             } else if (isUploadedAsset(review.profileImageUrl)) {
-                reviewerImage.src = review.profileImageUrl;
+                reviewerImage.src = getAssetUrl(review.profileImageUrl);
                 reviewerImage.alt = `${review.name || "Reviewer"} profile image`;
                 reviewerImage.hidden = false;
                 imagePlaceholder.hidden = true;
@@ -716,13 +730,13 @@ function renderAchievements(achievements) {
         card.querySelector("[data-achievement-title]").textContent = achievement.title || "";
         card.querySelector("[data-achievement-organization]").textContent = achievement.organization || "";
         card.querySelector("[data-achievement-description]").textContent = achievement.description || "";
-        if (isUploadedAsset(achievement.imageUrl) && /\.pdf$/i.test(achievement.imageUrl)) {
+        if (isUploadedAsset(achievement.imageUrl) && isPdfAsset(achievement.imageUrl)) {
             card.querySelector("[data-achievement-image]").replaceChildren(
                 createPortfolioPdfLink(achievement.imageUrl, "View achievement PDF")
             );
         } else if (isUploadedAsset(achievement.imageUrl)) {
             const image = document.createElement("img");
-            image.src = achievement.imageUrl;
+            image.src = getAssetUrl(achievement.imageUrl);
             image.alt = `${achievement.title || "Achievement"} image`;
             image.loading = "lazy";
             const imageArea = card.querySelector("[data-achievement-image]");
@@ -760,8 +774,6 @@ function renderExperience(experiences) {
         timeline.append(item);
     });
 }
-const API_URL = "https://portfolioweb-gmex.onrender.com";
-
 async function loadPortfolioContent() {
     const sections = [
         ["projects", (items) => window.renderFeaturedProjects?.(items)],
