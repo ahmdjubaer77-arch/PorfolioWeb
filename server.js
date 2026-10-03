@@ -9,6 +9,7 @@ const readline = require("readline/promises");
 const { randomBytes, randomUUID } = require("crypto");
 require("dotenv").config();
 const cors = require("cors");
+const { cloudinary, isCloudinaryConfigured } = require("./config/cloudinary");
 
 
 
@@ -28,6 +29,17 @@ const assetFields = {
     blog: "coverImageUrl",
     reviews: "profileImageUrl"
 };
+
+function isValidStoredAsset(section, value) {
+    if (assetPathPattern.test(value || "")) return true;
+    if (section !== "achievements" || typeof value !== "string") return false;
+    try {
+        const url = new URL(value);
+        return url.protocol === "https:" && url.hostname === "res.cloudinary.com" && url.pathname.includes("/image/upload/");
+    } catch {
+        return false;
+    }
+}
 
 fs.mkdirSync(uploadDirectory, { recursive: true });
 
@@ -55,6 +67,32 @@ const upload = multer({
         }
     }
 });
+
+const achievementImageUpload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, callback) => {
+        const allowedTypes = {
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".png": "image/png",
+            ".webp": "image/webp"
+        };
+        const extension = path.extname(file.originalname).toLowerCase();
+        if (allowedTypes[extension] === file.mimetype) return callback(null, true);
+        callback(new Error("Choose a JPG, JPEG, PNG, or WEBP image."));
+    }
+});
+
+function receiveAchievementImage(req, res, next) {
+    achievementImageUpload.single("file")(req, res, (error) => {
+        if (!error) return next();
+        const tooLarge = error.code === "LIMIT_FILE_SIZE";
+        return res.status(tooLarge ? 413 : 400).json({
+            message: tooLarge ? "Achievement images must be 5 MB or smaller." : error.message
+        });
+    });
+}
 
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
@@ -339,7 +377,8 @@ const achievementSchema = new mongoose.Schema({
     organization: { type: String, trim: true, default: "" },
     award: { type: String, trim: true, default: "" },
     description: { type: String, trim: true, default: "" },
-    imageUrl: uploadedFileField
+    imageUrl: { type: String, trim: true, default: "" },
+    imagePublicId: { type: String, trim: true, default: "" }
 }, { timestamps: true });
 
 const blogPostSchema = new mongoose.Schema({
@@ -491,6 +530,158 @@ app.use("/api", (req, res, next) => {
     next();
 });
 
+function parseAchievementRecord(req) {
+    const submittedRecord = req.body?.record;
+    const record = typeof submittedRecord === "string" ? JSON.parse(submittedRecord) : submittedRecord || req.body;
+    if (!record || typeof record !== "object" || Array.isArray(record)) throw new Error("Invalid achievement data.");
+    const values = { ...record };
+    delete values.imageUrl;
+    delete values.imagePublicId;
+    return values;
+}
+
+function hasValidAchievementImageSignature(file) {
+    const buffer = file?.buffer;
+    if (!Buffer.isBuffer(buffer)) return false;
+    const extension = path.extname(file.originalname).toLowerCase();
+    if ((extension === ".jpg" || extension === ".jpeg") && file.mimetype === "image/jpeg") {
+        return buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+    }
+    if (extension === ".png" && file.mimetype === "image/png") {
+        return buffer.length >= 8 && buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+    }
+    if (extension === ".webp" && file.mimetype === "image/webp") {
+        return buffer.length >= 12 && buffer.toString("ascii", 0, 4) === "RIFF" && buffer.toString("ascii", 8, 12) === "WEBP";
+    }
+    return false;
+}
+
+function uploadAchievementToCloudinary(buffer) {
+    return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream({
+            folder: "portfolio/achievements",
+            resource_type: "image",
+            allowed_formats: ["jpg", "jpeg", "png", "webp"]
+        }, (error, result) => {
+            if (error) return reject(error);
+            if (!result?.secure_url || !result.public_id) return reject(new Error("Cloudinary returned incomplete image details."));
+            resolve({ imageUrl: result.secure_url, imagePublicId: result.public_id });
+        }).end(buffer);
+    });
+}
+
+async function deleteCloudinaryAchievement(publicId) {
+    if (!publicId) return;
+    try {
+        const result = await cloudinary.uploader.destroy(publicId, { resource_type: "image", invalidate: true });
+        if (result.result !== "ok" && result.result !== "not found") {
+            console.error("Cloudinary achievement deletion was not confirmed:", result.result);
+        }
+    } catch (error) {
+        console.error("Cloudinary achievement deletion failed:", error);
+    }
+}
+
+function sendAchievementError(res, error, fallbackMessage) {
+    const isValidationError = error instanceof SyntaxError || error.name === "ValidationError" || error.message === "Invalid achievement data.";
+    console.error("Achievement API operation failed:", error);
+    const message = isValidationError ? error.message :
+        process.env.NODE_ENV === "production" ? fallbackMessage : error.message || fallbackMessage;
+    return res.status(isValidationError ? 400 : 500).json({ message });
+}
+
+app.post("/api/achievements", receiveAchievementImage, async (req, res) => {
+    let uploadedImage = null;
+    try {
+        const record = parseAchievementRecord(req);
+        if (req.file) {
+            if (!hasValidAchievementImageSignature(req.file)) {
+                return res.status(400).json({ message: "The uploaded file is not a valid JPG, PNG, or WEBP image." });
+            }
+            if (!isCloudinaryConfigured()) {
+                return res.status(503).json({ message: "Achievement image storage is not configured." });
+            }
+            try {
+                uploadedImage = await uploadAchievementToCloudinary(req.file.buffer);
+            } catch (error) {
+                console.error("Cloudinary achievement upload failed:", error);
+                return res.status(502).json({ message: "The achievement image could not be uploaded. Please try again." });
+            }
+            Object.assign(record, uploadedImage);
+        }
+
+        const achievement = await models.achievements.create(record);
+        return res.status(201).json(achievement);
+    } catch (error) {
+        if (uploadedImage?.imagePublicId) await deleteCloudinaryAchievement(uploadedImage.imagePublicId);
+        return sendAchievementError(res, error, "Achievement could not be saved.");
+    }
+});
+
+async function updateAchievement(req, res) {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ message: "Achievement not found." });
+
+    let uploadedImage = null;
+    try {
+        const existing = await models.achievements.findById(req.params.id);
+        if (!existing) return res.status(404).json({ message: "Achievement not found." });
+        const record = parseAchievementRecord(req);
+
+        if (req.file) {
+            if (!hasValidAchievementImageSignature(req.file)) {
+                return res.status(400).json({ message: "The uploaded file is not a valid JPG, PNG, or WEBP image." });
+            }
+            if (!isCloudinaryConfigured()) {
+                return res.status(503).json({ message: "Achievement image storage is not configured." });
+            }
+            try {
+                uploadedImage = await uploadAchievementToCloudinary(req.file.buffer);
+            } catch (error) {
+                console.error("Cloudinary achievement upload failed:", error);
+                return res.status(502).json({ message: "The new achievement image could not be uploaded. The existing image was kept." });
+            }
+            Object.assign(record, uploadedImage);
+        }
+
+        const achievement = await models.achievements.findByIdAndUpdate(req.params.id, { $set: record }, {
+            new: true,
+            runValidators: true
+        });
+        if (!achievement) {
+            if (uploadedImage?.imagePublicId) await deleteCloudinaryAchievement(uploadedImage.imagePublicId);
+            return res.status(404).json({ message: "Achievement not found." });
+        }
+
+        if (uploadedImage) {
+            if (existing.imagePublicId && existing.imagePublicId !== uploadedImage.imagePublicId) {
+                await deleteCloudinaryAchievement(existing.imagePublicId);
+            } else if (assetPathPattern.test(existing.imageUrl || "")) {
+                await removeUploadedFile(existing.imageUrl);
+            }
+        }
+        return res.json(achievement);
+    } catch (error) {
+        if (uploadedImage?.imagePublicId) await deleteCloudinaryAchievement(uploadedImage.imagePublicId);
+        return sendAchievementError(res, error, "Achievement could not be updated.");
+    }
+}
+
+app.put("/api/achievements/:id", receiveAchievementImage, updateAchievement);
+app.patch("/api/achievements/:id", receiveAchievementImage, updateAchievement);
+
+app.delete("/api/achievements/:id", async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ message: "Achievement not found." });
+    try {
+        const achievement = await models.achievements.findByIdAndDelete(req.params.id);
+        if (!achievement) return res.status(404).json({ message: "Achievement not found." });
+        if (achievement.imagePublicId) await deleteCloudinaryAchievement(achievement.imagePublicId);
+        else if (assetPathPattern.test(achievement.imageUrl || "")) await removeUploadedFile(achievement.imageUrl);
+        return res.json({ message: "Achievement deleted." });
+    } catch (error) {
+        return sendAchievementError(res, error, "Achievement could not be deleted.");
+    }
+});
+
 app.get("/api/:section", async (req, res) => {
     const Model = models[req.params.section];
     if (!Model) return res.status(404).json({ message: "Section not found" });
@@ -500,7 +691,7 @@ app.get("/api/:section", async (req, res) => {
         const assetField = assetFields[req.params.section];
         if (assetField) {
             items.forEach((item) => {
-                if (item[assetField] && !assetPathPattern.test(item[assetField])) item[assetField] = "";
+                if (item[assetField] && !isValidStoredAsset(req.params.section, item[assetField])) item[assetField] = "";
             });
         }
         res.json(items);
@@ -552,7 +743,7 @@ app.get("/api/:section/:id", async (req, res) => {
         const item = await Model.findById(req.params.id);
         if (!item) return res.status(404).json({ message: "Item not found" });
         const assetField = assetFields[req.params.section];
-        if (assetField && item[assetField] && !assetPathPattern.test(item[assetField])) item[assetField] = "";
+        if (assetField && item[assetField] && !isValidStoredAsset(req.params.section, item[assetField])) item[assetField] = "";
         res.json(item);
     } catch (error) {
         res.status(400).json({ message: error.message });

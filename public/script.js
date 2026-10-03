@@ -171,7 +171,9 @@ if (skillsSection) {
 }
 
 const projectsSection = document.querySelector(".projects");
-const API_URL = "https://portfolioweb-gmex.onrender.com";
+const isLocalPortfolio = window.location.protocol === "file:" ||
+    window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+const API_URL = isLocalPortfolio ? "http://localhost:3000" : "https://portfolioweb-gmex.onrender.com";
 
 function getAssetUrl(filePath) {
     if (!filePath) return "";
@@ -774,9 +776,12 @@ function renderSkills(skills) {
     });
 }
 
+let achievementCardTemplate = null;
+
 function renderAchievements(achievements) {
     const grid = document.querySelector("[data-achievement-list]");
-    const template = grid?.querySelector("[data-achievement]");
+    if (!achievementCardTemplate) achievementCardTemplate = grid?.querySelector("[data-achievement]")?.cloneNode(true) || null;
+    const template = achievementCardTemplate;
     if (!grid || !template) return;
 
     grid.replaceChildren();
@@ -792,16 +797,19 @@ function renderAchievements(achievements) {
         card.querySelector("[data-achievement-title]").textContent = achievement.title || "";
         card.querySelector("[data-achievement-organization]").textContent = achievement.organization || "";
         card.querySelector("[data-achievement-description]").textContent = achievement.description || "";
+        const imageArea = card.querySelector("[data-achievement-image]");
         if (isUploadedAsset(achievement.imageUrl) && isPdfAsset(achievement.imageUrl)) {
-            card.querySelector("[data-achievement-image]").replaceChildren(
-                createPortfolioPdfLink(achievement.imageUrl, "View achievement PDF")
-            );
+            imageArea.replaceChildren(createPortfolioPdfLink(achievement.imageUrl, "View achievement PDF"));
         } else if (isUploadedAsset(achievement.imageUrl)) {
             const image = document.createElement("img");
-            image.src = getAssetUrl(achievement.imageUrl);
             image.alt = `${achievement.title || "Achievement"} image`;
             image.loading = "lazy";
-            const imageArea = card.querySelector("[data-achievement-image]");
+            const placeholderChildren = [...imageArea.childNodes].map((node) => node.cloneNode(true));
+            image.addEventListener("error", () => {
+                imageArea.classList.remove("has-certificate-image");
+                imageArea.replaceChildren(...placeholderChildren);
+            }, { once: true });
+            image.src = getAssetUrl(achievement.imageUrl);
             imageArea.classList.add("has-certificate-image");
             imageArea.replaceChildren(image);
         }

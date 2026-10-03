@@ -171,7 +171,7 @@ function openForm(item = null) {
         } else {
             input.type = type === "list" ? "text" : type === "file" ? "file" : type;
             if (type === "file") {
-                input.accept = ".jpg,.jpeg,.png,.pdf";
+                input.accept = activeSection === "achievements" ? ".jpg,.jpeg,.png,.webp" : ".jpg,.jpeg,.png,.pdf";
                 input.addEventListener("change", () => previewFile(input));
             }
             if (type === "number" && name === "rating") {
